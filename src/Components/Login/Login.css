@@ -1,0 +1,35 @@
+.loginButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.loginPage {
+  display: flex;
+  justify-content: center;
+  background-color: aliceblue;
+  height: 100vh;
+}
+.emailInput {
+  width: 200px;
+  padding: 6px 15px;
+  margin: 8px;
+  border: 1px solid #4e9af1;
+  border-radius: 4px;
+}
+.passwordInput {
+  width: 200px;
+  padding: 6px 15px;
+  margin: 8px;
+  border: 1px solid #4e9af1;
+  border-radius: 4px;
+}
+.handleButton {
+  width: 100px;
+  background-color: #4e9af1;
+  padding: 10px 6px;
+  margin: 8px;
+  border: 1px solid rgb(207, 182, 182);
+  border-radius: 3px solid rgb(207, 182, 182);
+  color: white;
+}
