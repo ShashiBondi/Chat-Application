@@ -14,6 +14,8 @@ function Home() {
   const [text, setText] = useState("");
   const [Messages, setMessages] = useState([]);
 
+  useEffect(handleAuth, []);
+
   function handleAuth() {
     Auth.onAuthStateChanged(function c(response) {
       console.log(response);
@@ -43,7 +45,7 @@ function Home() {
         });
     });
   }
-  useEffect(handleAuth, []);
+
   function handleChatuser(item) {
     setchatUserID(item.key);
     setchatUserName(item.Name);
@@ -58,8 +60,9 @@ function Home() {
       .collection("Conversations")
       .doc(m)
       .collection("messages")
-      .get()
-      .then(function (z) {
+      .orderBy("createdTime")
+      .onSnapshot(function (z) {
+        console.log(z);
         const y = z.docs;
         console.log(y);
         const ylist = y.map(function (item) {
@@ -72,13 +75,13 @@ function Home() {
   const viewMessages = Messages.map(function (item) {
     if (item.By === userID) {
       return (
-        <div style={{ textAlign: "right" }}>
+        <div style={{ textAlign: "right" }} key={item.messageId}>
           <p className="rightMessage">{item.message}</p>
         </div>
       );
     } else {
       return (
-        <div style={{ textAlign: "left" }}>
+        <div style={{ textAlign: "left" }} key={item.messageId}>
           <p className="leftMessage">{item.message}</p>
         </div>
       );
@@ -87,7 +90,6 @@ function Home() {
 
   const x = usersList
     .filter(function (item) {
-      // console.log(item, userID);
       if (item.key !== userID) {
         return true;
       } else {
@@ -97,6 +99,7 @@ function Home() {
     .map(function (item) {
       return (
         <div
+          key={item.key}
           onClick={function sample() {
             handleChatuser(item);
           }}
@@ -109,6 +112,7 @@ function Home() {
   function textChange(event) {
     setText(event.target.value);
   }
+
   function addinDataBase() {
     const messageId = v4();
     dataBase
@@ -117,10 +121,11 @@ function Home() {
       .collection("messages")
       .doc(messageId)
       .set({
+        messageId: messageId,
         message: text,
         By: userID,
         To: chatUserID,
-        createdTime: firebase.database.ServerValue.TIMESTAMP,
+        createdTime: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(function () {
         setText("");
