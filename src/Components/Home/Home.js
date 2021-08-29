@@ -4,7 +4,7 @@ import { Auth, dataBase } from "../../Config/Firebaseconfig";
 import { v4 } from "uuid";
 import "./Home.css";
 
-function Home() {
+function Home(props) {
   const [userID, setUserID] = useState("");
   const [userName, setuserName] = useState("");
   const [usersList, setusersList] = useState([]);
@@ -75,19 +75,38 @@ function Home() {
   const viewMessages = Messages.map(function (item) {
     if (item.By === userID) {
       return (
-        <div style={{ textAlign: "right" }} key={item.messageId}>
-          <p className="rightMessage">{item.message}</p>
+        <div style={{ marginBottom: "5px" }}>
+          <div className="message1">
+            <div className="text1">{item.message}</div>
+          </div>
+          <div className="date1">
+            <div
+              style={{ fontSize: "11px", color: "gray", marginBottom: "3px" }}
+            >
+              Apr 16
+            </div>
+          </div>
         </div>
       );
     } else {
       return (
-        <div style={{ textAlign: "left" }} key={item.messageId}>
-          <p className="leftMessage">{item.message}</p>
+        <div style={{ marginBottom: "5px" }}>
+          <div className="message2">
+            <div className="text2">{item.message}</div>
+          </div>
+          <div className="date2">
+            <div
+              style={{ fontSize: "11px", color: "gray", marginBottom: "3px" }}
+            >
+              Apr 16
+            </div>
+          </div>
         </div>
       );
     }
   });
 
+  console.log({ Messages });
   const x = usersList
     .filter(function (item) {
       if (item.key !== userID) {
@@ -99,12 +118,15 @@ function Home() {
     .map(function (item) {
       return (
         <div
+          className={
+            chatUserID === item.key ? "conversation active " : "conversation"
+          }
           key={item.key}
           onClick={function sample() {
             handleChatuser(item);
           }}
         >
-          {item.Name}
+          <div className="title-text"> {item.Name}</div>
         </div>
       );
     });
@@ -131,45 +153,68 @@ function Home() {
         setText("");
       });
   }
+  function Signout() {
+    Auth.signOut()
+      .then(function () {
+        props.history.push("/");
+      })
+      .catch(function () {});
+  }
+
   return (
     <div>
-      {" "}
-      <h3>Welcome {userName}</h3>
-      <section className="container">
-        <div className="listOfUsers">
-          <div className="displayName">
-            {/* <div className="displayPic">
-              <img
-                src="https://i.pinimg.com/originals/be/ac/96/beac96b8e13d2198fd4bb1d5ef56cdcf.jpg"
-                alt=""
-              />
-            </div> */}
-            <div style={{ margin: "0 10px" }}>
-              <div style={{ fontWeight: 500 }}>{x}</div>
-            </div>
-          </div>
+      <div className="header">
+        <div className="headerText">Welcome {userName}</div>
+        <div>
+          <button onClick={Signout}>Logout</button>
         </div>
-        <div className="chatArea">
-          {chatUserID ? (
-            <div>
-              <div className="chatHeader">{chatUserName}</div>
-              <div className="messageSections">{viewMessages}</div>
-              <div className="chatControls">
-                <textarea
+      </div>
+      <div className="layout">
+        <div className="items">
+          <div className="box1">{x}</div>
+          <div className="box2">
+            <div className="right-box1">{chatUserName}</div>
+            {chatUserID ? (
+              <div className="right-box2">{viewMessages} </div>
+            ) : (
+              <div
+                className="right-box2"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                Select User to Continue Chatting
+              </div>
+            )}
+
+            {chatUserID ? (
+              <div
+                className="right-box3"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: "10px",
+                }}
+              >
+                <input
+                  style={{ flex: 7 }}
+                  placeholder="Type a Message"
+                  id="message-input"
                   onChange={textChange}
                   value={text}
-                  placeholder="Type a message"
                 />
-                <button onClick={addinDataBase}>Send</button>
+                <button style={{ flex: 1 }} onClick={addinDataBase}>
+                  Send
+                </button>
               </div>
-            </div>
-          ) : (
-            <div style={{ textAlign: "center" }}>
-              <h2>Select User to Chat</h2>
-            </div>
-          )}
+            ) : (
+              <div className="right-box3" />
+            )}
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
