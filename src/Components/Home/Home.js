@@ -5,35 +5,33 @@ import { v4 } from "uuid";
 import "./Home.css";
 
 function Home(props) {
-  const [userID, setUserID] = useState("");
-  const [userName, setuserName] = useState("");
   const [usersList, setusersList] = useState([]);
-  const [chatUserName, setchatUserName] = useState("");
-  const [chatUserID, setchatUserID] = useState("");
   const [conversationID, setConversationID] = useState("");
   const [text, setText] = useState("");
   const [Messages, setMessages] = useState([]);
+  const [userDetails, setUserDetails] = useState({});
+  const [chatUserDetails, setChatUserDetails] = useState({});
 
   useEffect(handleAuth, []);
 
   function handleAuth() {
     Auth.onAuthStateChanged(function c(response) {
-      console.log(response);
       const userId = response.uid;
-      setUserID(userId);
       dataBase
         .collection("Users")
         .doc(userId)
         .get()
-        .then(function docs(doc) {
-          setuserName(doc.data().name);
+        .then(function (response) {
+          setUserDetails({ name: response.data().name, id: userId });
+        })
+        .catch(function (error) {
+          window.alert(error.message);
         });
       dataBase
         .collection("Users")
         .get()
         .then(function users(docuser) {
           const list = docuser.docs;
-          console.log(list);
           const maplist = list.map(function (item) {
             return item.data();
           });
@@ -47,13 +45,14 @@ function Home(props) {
   }
 
   function handleChatuser(item) {
-    setchatUserID(item.key);
-    setchatUserName(item.Name);
+    setChatUserDetails({ name: item.Name, id: item.key });
+
     let m;
-    if (item.key < userID) {
-      m = `${item.key}${userID}`;
+    const u = userDetails.id;
+    if (item.key < u) {
+      m = `${item.key}${u}`;
     } else {
-      m = `${userID}${item.key}`;
+      m = `${u}${item.key}`;
     }
     setConversationID(m);
     dataBase
@@ -73,7 +72,7 @@ function Home(props) {
   }
 
   const viewMessages = Messages.map(function (item) {
-    if (item.By === userID) {
+    if (item.By === userDetails.id) {
       return (
         <div style={{ marginBottom: "5px" }}>
           <div className="message1">
@@ -82,9 +81,7 @@ function Home(props) {
           <div className="date1">
             <div
               style={{ fontSize: "11px", color: "gray", marginBottom: "3px" }}
-            >
-              Apr 16
-            </div>
+            ></div>
           </div>
         </div>
       );
@@ -97,9 +94,7 @@ function Home(props) {
           <div className="date2">
             <div
               style={{ fontSize: "11px", color: "gray", marginBottom: "3px" }}
-            >
-              Apr 16
-            </div>
+            ></div>
           </div>
         </div>
       );
@@ -107,9 +102,9 @@ function Home(props) {
   });
 
   console.log({ Messages });
-  const x = usersList
+  const _usersList = usersList
     .filter(function (item) {
-      if (item.key !== userID) {
+      if (item.key !== userDetails.id) {
         return true;
       } else {
         return false;
@@ -119,14 +114,16 @@ function Home(props) {
       return (
         <div
           className={
-            chatUserID === item.key ? "conversation active " : "conversation"
+            chatUserDetails.id === item.key
+              ? "conversation active "
+              : "conversation"
           }
           key={item.key}
           onClick={function sample() {
             handleChatuser(item);
           }}
         >
-          <div className="title-text"> {item.Name}</div>
+          <div className="title-text">{chatUserDetails.name}</div>
         </div>
       );
     });
@@ -145,8 +142,8 @@ function Home(props) {
       .set({
         messageId: messageId,
         message: text,
-        By: userID,
-        To: chatUserID,
+        By: userDetails.id,
+        To: chatUserDetails.id,
         createdTime: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(function () {
@@ -164,17 +161,17 @@ function Home(props) {
   return (
     <div>
       <div className="header">
-        <div className="headerText">Welcome {userName}</div>
+        <div className="headerText">Welcome {userDetails.name}</div>
         <div>
           <button onClick={Signout}>Logout</button>
         </div>
       </div>
       <div className="layout">
         <div className="items">
-          <div className="box1">{x}</div>
+          <div className="box1">{_usersList}</div>
           <div className="box2">
-            <div className="right-box1">{chatUserName}</div>
-            {chatUserID ? (
+            <div className="right-box1">{chatUserDetails.name}</div>
+            {chatUserDetails.id ? (
               <div className="right-box2">{viewMessages} </div>
             ) : (
               <div
@@ -189,7 +186,7 @@ function Home(props) {
               </div>
             )}
 
-            {chatUserID ? (
+            {chatUserDetails.id ? (
               <div
                 className="right-box3"
                 style={{

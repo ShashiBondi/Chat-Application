@@ -13,7 +13,7 @@ html {
 }
 .header {
   width: 100%;
-  background-color: rgb(0, 89, 255);
+  background-color: rgb(17, 202, 26);
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -44,31 +44,31 @@ html {
 .items {
   height: 90%;
   width: 60%;
-  background-color: blue;
+  background-color: rgb(17, 202, 26);
   display: flex;
 }
 .box1 {
   height: 100%;
   width: 30%;
-  background-color: rgb(0, 89, 255);
+  background-color: rgb(17, 202, 26);
   overflow-y: scroll;
 }
 .box2 {
   height: 100%;
   width: 70%;
-  background-color: rgb(0, 89, 255);
+  background-color: rgb(17, 202, 26);
   display: flex;
   flex-direction: column;
 }
 
 .conversation {
   color: #ddd;
-  border-bottom: 1px solid#002c88;
+  border-bottom: 1px solidrgb(17, 202, 26);
   padding: 20px 20px 20px 15px;
 }
 
 .conversation.active {
-  background: #002c88;
+  background: rgb(17, 202, 26);
 }
 
 .conversation:hover {
@@ -89,7 +89,7 @@ html {
   background-color: whitesmoke;
   font-size: 20px;
   font-weight: 600;
-  color: rgb(0, 4, 255);
+  color: rgb(17, 202, 26);
   display: flex;
   align-items: center;
 }
