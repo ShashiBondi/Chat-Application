@@ -32,7 +32,7 @@ function Login(props) {
       <div className="loginButton">
         {/* <h1>Loads Of Tasks To Accomplish!</h1> */}
         {/* <div>LOGIN HERE</div> */}
-        <div>Enter Email</div>
+        <div>Enter Your Email</div>
         <input
           onChange={inputEmail}
           value={Email}
