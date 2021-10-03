@@ -38,7 +38,7 @@ function Signup(props) {
       response
     ) {
       const userID = response.user.uid;
-
+      console.log(userID, response);
       dataBase
         .collection("Users")
         .doc(userID)
