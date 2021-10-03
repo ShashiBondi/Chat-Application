@@ -79,13 +79,13 @@ function Home(props) {
           <div className="message1">
             <div className="text1">{item.message}</div>
           </div>
-          <div className="date1">
+          {/* <div className="date1">
             <div
               style={{ fontSize: "11px", color: "gray", marginBottom: "3px" }}
             >
               Apr 16
             </div>
-          </div>
+          </div> */}
         </div>
       );
     } else {
@@ -94,13 +94,13 @@ function Home(props) {
           <div className="message2">
             <div className="text2">{item.message}</div>
           </div>
-          <div className="date2">
+          {/* <div className="date2">
             <div
               style={{ fontSize: "11px", color: "gray", marginBottom: "3px" }}
             >
               Apr 16
             </div>
-          </div>
+          </div> */}
         </div>
       );
     }
