@@ -136,22 +136,24 @@ function Home(props) {
   }
 
   function addinDataBase() {
-    const messageId = v4();
-    dataBase
-      .collection("Conversations")
-      .doc(conversationID)
-      .collection("messages")
-      .doc(messageId)
-      .set({
-        messageId: messageId,
-        message: text,
-        By: userID,
-        To: chatUserID,
-        createdTime: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      .then(function () {
-        setText("");
-      });
+    if (text) {
+      const messageId = v4();
+      dataBase
+        .collection("Conversations")
+        .doc(conversationID)
+        .collection("messages")
+        .doc(messageId)
+        .set({
+          messageId: messageId,
+          message: text,
+          By: userID,
+          To: chatUserID,
+          createdTime: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+        .then(function () {
+          setText("");
+        });
+    }
   }
   function Signout() {
     Auth.signOut()
