@@ -14,18 +14,20 @@ function Login(props) {
     setPassword(event.target.value);
   }
   function buttonClick() {
-    Auth.signInWithEmailAndPassword(Email, Password).then(function k() {
-      props.history.push("/Home");
-    });
-    // .then((userCredential) => {
-    //   // Signed in
-    //   var user = userCredential.user;
-    //   // ...
-    // })
-    // .catch((error) => {
-    //   var errorCode = error.code;
-    //   var errorMessage = error.message;
-    // });
+    Auth.signInWithEmailAndPassword(Email, Password)
+      .then(function k() {
+        props.history.push("/Home");
+      })
+      // .then((userCredential) => {
+      //   // Signed in
+      //   var user = userCredential.user;
+      //   // ...
+      // })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        window.alert(errorMessage);
+      });
   }
   return (
     <div className="loginPage">
