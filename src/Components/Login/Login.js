@@ -24,7 +24,7 @@ function Login(props) {
       //   // ...
       // })
       .catch((error) => {
-        var errorCode = error.code;
+        // var errorCode = error.code;
         var errorMessage = error.message;
         window.alert(errorMessage);
       });
